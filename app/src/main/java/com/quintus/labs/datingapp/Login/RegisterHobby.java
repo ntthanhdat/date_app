@@ -17,6 +17,8 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.UserInfo;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.quintus.labs.datingapp.Main.MainActivity;
 import com.quintus.labs.datingapp.R;
 import com.quintus.labs.datingapp.Utils.User;
@@ -27,9 +29,12 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.quintus.labs.datingapp.Main.MainActivity;
 import com.quintus.labs.datingapp.R;
+
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * DatingApp
  * https://github.com/quintuslabs/DatingApp
@@ -44,7 +49,7 @@ public class RegisterHobby extends AppCompatActivity {
     User userInfo;
     String password;
 FirebaseAuth fAuth;
-
+    FirebaseFirestore fStore;
     private Context mContext;
     private Button hobbiesContinueButton;
     private Button sportsSelectionButton;
@@ -60,7 +65,7 @@ FirebaseAuth fAuth;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_hobby);
         mContext = RegisterHobby.this;
-        fAuth =FirebaseAuth.getInstance();
+        fAuth =FirebaseAuth.getInstance(); fStore= FirebaseFirestore.getInstance();
         Log.d(TAG, "onCreate: started");
 
         Intent intent = getIntent();
@@ -207,6 +212,42 @@ FirebaseAuth fAuth;
                     @Override
                     public void onSuccess(AuthResult authResult) {
                         Toast.makeText(mContext, "Register successfully", Toast.LENGTH_SHORT).show();
+                        //
+                       // String userId = fAuth.getCurrentUser().getUid();
+                        DocumentReference docref = fStore.collection("user").document();
+                        Map<String, Object> userdoc=new HashMap<>();
+                        userdoc.put("name",username);
+                        userdoc.put("phone",phone);
+                        userdoc.put("email",email);
+                        userdoc.put("date",date);
+                        userdoc.put("presex",presex);
+                        userdoc.put("sex",sex);
+                        userdoc.put("lat",lati);
+                        userdoc.put("long",longti);
+                        userdoc.put("fishing",fishing);
+                        userdoc.put("music",music);
+                        userdoc.put("sport",sport);
+                        userdoc.put("travel",travel);
+                        userdoc.put("des",des);
+                        userdoc.put("profileImageUrl", "default");
+
+
+
+                        fStore.collection("user")
+                                .add(userdoc)
+                                .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        Log.d(TAG, "DocumentSnapshot added with ID: " + documentReference.getId());
+                                    }
+                                })
+                                .addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        Log.w(TAG, "Error adding document", e);
+                                    }
+                                });
+                        //
                         Intent intent = new Intent(RegisterHobby.this, MainActivity.class);
                         startActivity(intent);
                         finish();
