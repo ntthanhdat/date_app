@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "787651162690",
+    "project_id": "android-316510",
+    "storage_bucket": "android-316510.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787651162690:android:222a75e6d5ccdb83ebf3db",
+        "android_client_info": {
+          "package_name": "com.nttd.nttdating"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787651162690-pttrslart9ujh798mt2dchdm78a71oj6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaRJH7fAQdCn-5Tm-mO5i60Zy8XfBYroY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787651162690-pttrslart9ujh798mt2dchdm78a71oj6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:787651162690:android:ecb637d2546a0396ebf3db",
+        "android_client_info": {
+          "package_name": "com.quintus.labs.datingapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "787651162690-pttrslart9ujh798mt2dchdm78a71oj6.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDaRJH7fAQdCn-5Tm-mO5i60Zy8XfBYroY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "787651162690-pttrslart9ujh798mt2dchdm78a71oj6.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
