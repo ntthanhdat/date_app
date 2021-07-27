@@ -3,17 +3,33 @@ package com.quintus.labs.datingapp.Login;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
+import android.net.wifi.hotspot2.pps.Credential;
 import android.os.Bundle;
+
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.auth.UserProfileChangeRequest;
 import com.quintus.labs.datingapp.Main.MainActivity;
 import com.quintus.labs.datingapp.R;
 import com.quintus.labs.datingapp.Utils.User;
 
-
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.quintus.labs.datingapp.Main.MainActivity;
+import com.quintus.labs.datingapp.R;
 /**
  * DatingApp
  * https://github.com/quintuslabs/DatingApp
@@ -27,6 +43,7 @@ public class RegisterHobby extends AppCompatActivity {
     //User Info
     User userInfo;
     String password;
+FirebaseAuth fAuth;
 
     private Context mContext;
     private Button hobbiesContinueButton;
@@ -43,7 +60,7 @@ public class RegisterHobby extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_hobby);
         mContext = RegisterHobby.this;
-
+        fAuth =FirebaseAuth.getInstance();
         Log.d(TAG, "onCreate: started");
 
         Intent intent = getIntent();
@@ -169,15 +186,51 @@ public class RegisterHobby extends AppCompatActivity {
         hobbiesContinueButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(getApplicationContext(), MainActivity.class));
-                finish();
+                //----------------------------------------Firebase----------------------------------------
+                //dangky trong firebase
+
+                String username= userInfo.getUsername(),
+                email = userInfo.getEmail(),
+                        phone= userInfo.getPhone_number(),
+                        des= userInfo.getDescription(),
+                        date= userInfo.getDateOfBirth(),
+                        presex= userInfo.getPreferSex(),
+                        sex= userInfo.getSex();
+
+                boolean fishing= userInfo.isFishing(),
+                        music= userInfo.isMusic(),
+                        sport=userInfo.isSports(),
+                        travel =userInfo.isTravel();
+                double lati= userInfo.getLatitude(),
+                        longti= userInfo.getLongtitude();
+                fAuth.createUserWithEmailAndPassword(email,password).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+                    @Override
+                    public void onSuccess(AuthResult authResult) {
+                        Toast.makeText(mContext, "Register successfully", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterHobby.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Toast.makeText(mContext, "Register false", Toast.LENGTH_SHORT).show();
+                        Intent intent = new Intent(RegisterHobby.this, Login.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                });
+
+                //
+
+
 
             }
         });
     }
 
 
-    //----------------------------------------Firebase----------------------------------------
+
 
 
 }

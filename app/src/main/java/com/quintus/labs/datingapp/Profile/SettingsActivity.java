@@ -1,5 +1,6 @@
 package com.quintus.labs.datingapp.Profile;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,8 +10,13 @@ import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.quintus.labs.datingapp.Introduction.IntroductionMain;
+import com.quintus.labs.datingapp.Login.Login;
+import com.quintus.labs.datingapp.Main.MainActivity;
 import com.quintus.labs.datingapp.R;
 import com.yahoo.mobile.client.android.util.rangeseekbar.RangeSeekBar;
 
@@ -26,14 +32,14 @@ public class SettingsActivity extends AppCompatActivity {
     SeekBar distance;
     SwitchCompat man, woman;
     RangeSeekBar rangeSeekBar;
-    TextView gender, distance_text, age_rnge;
-
+    TextView gender, distance_text, age_rnge, logout, deleteacc;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
+        mContext = SettingsActivity.this;
 
         TextView toolbar = findViewById(R.id.toolbartag);
         toolbar.setText("Profile");
@@ -44,8 +50,8 @@ public class SettingsActivity extends AppCompatActivity {
         distance_text = findViewById(R.id.distance_text);
         age_rnge = findViewById(R.id.age_range);
         rangeSeekBar = findViewById(R.id.rangeSeekbar);
-
-
+        logout= findViewById(R.id.logout);
+        deleteacc= findViewById(R.id.deleteacc);
         distance.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
             public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
@@ -93,9 +99,33 @@ public class SettingsActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+//log out
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FirebaseAuth.getInstance().signOut();
+                Toast.makeText(mContext, "you've been logout", Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(SettingsActivity.this, Login.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
 
-    }
+    deleteacc.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            FirebaseUser user =FirebaseAuth.getInstance().getCurrentUser();
+            user.delete();
+            FirebaseAuth.getInstance().signOut();
+            Toast.makeText(mContext, "account deleted", Toast.LENGTH_SHORT).show();
+            Intent intent = new Intent(SettingsActivity.this, Login.class);
+            startActivity(intent);
+            finish();
+        }
+    });
+}
+
 
     public void Logout(View view) {
         startActivity(new Intent(getApplicationContext(), IntroductionMain.class));
